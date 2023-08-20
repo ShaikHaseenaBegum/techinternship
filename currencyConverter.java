@@ -1,23 +1,52 @@
-public class ConvertingForienHeatToCelcius {
-	  // Method to convert Foreignheat to Celcius
-    public static double fahrenheitToCelsius(double fahrenheit) {
-        return (fahrenheit - 32) * 5 / 9;
-    }
+import java.text.DecimalFormat;
+	import java.util.HashMap;
+	import java.util.Map;
+	import java.util.Scanner;
 
-    // Method to convert Celcius to Foreignheat
-    public static double celsiusToFahrenheit(double celsius) {
-        return (celsius * 9 / 5) + 32;
-    }
+	public class CurrencyConverter {
+	    public static void main(String[] args) {
+	        Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
-        // Test the conversion methods
-        double fahrenheitValue = 77.0;
-        double celsiusValue = 25.0;
+	        // Define exchange rates
+	        Map<String, Double> exchangeRates = new HashMap<>();
+	        exchangeRates.put("USD", 1.0);
+	        exchangeRates.put("EUR", 0.85);
+	        exchangeRates.put("GBP", 0.72);
+	        exchangeRates.put("JPY", 110.76);
+	        exchangeRates.put("CAD", 1.26); // Canadian Dollar
 
-        double convertedCelsius = fahrenheitToCelsius(fahrenheitValue);
-        double convertedFahrenheit = celsiusToFahrenheit(celsiusValue);
+	        System.out.println("Supported currencies: USD, EUR, GBP, JPY, CAD");
 
-        System.out.println(fahrenheitValue + " degrees Fahrenheit is equal to " + convertedCelsius + " degrees Celsius.");
-        System.out.println(celsiusValue + " degrees Celsius is equal to " + convertedFahrenheit + " degrees Fahrenheit.");
-    }
-}
+	        System.out.print("Enter amount: ");
+	        double amount = scanner.nextDouble();
+
+	        System.out.print("Enter source currency (e.g., USD): ");
+	        String sourceCurrency = scanner.next().toUpperCase();
+
+	        System.out.println("Choose target currency:");
+	        for (String currency : exchangeRates.keySet()) {
+	            if (!currency.equals(sourceCurrency)) {
+	                System.out.println("- " + currency);
+	            }
+	        }
+
+	        System.out.print("Enter target currency: ");
+	        String targetCurrency = scanner.next().toUpperCase();
+
+	        if (!exchangeRates.containsKey(targetCurrency)) {
+	            System.out.println("Unsupported target currency.");
+	            scanner.close();
+	            return;
+	        }
+
+	        double sourceToUSD = amount / exchangeRates.get(sourceCurrency);
+	        double convertedAmount = sourceToUSD * exchangeRates.get(targetCurrency);
+
+	        DecimalFormat df = new DecimalFormat("#.##");
+	        System.out.println(amount + " " + sourceCurrency + " is equivalent to " +
+	                df.format(convertedAmount) + " " + targetCurrency);
+
+	        scanner.close();
+	    }
+	}
+
